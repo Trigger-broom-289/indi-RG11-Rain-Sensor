@@ -23,10 +23,6 @@
 *******************************************************************************/
 
 #include <memory>
-//#include <libnova.h>
-//#include <time.h>
-
-//#include "gason.h"
 #include "indi_rainsensor.h"
 
 // We declare an auto pointer to RainSensor.
@@ -102,22 +98,11 @@ bool IndiRainSensor::Disconnect()
 bool IndiRainSensor::initProperties()
 {
     INDI::Weather::initProperties();
-
-
     addParameter("WEATHER_RAIN", "Rain", 0, 0, 0, 0);
-
     setCriticalParameter("WEATHER_RAIN");
-
     addDebugControl();
-
     return true;
-
 }
-
-//void IndiRainSensor::ISGetProperties(const char *dev)
-//{
-//    INDI::Weather::ISGetProperties(dev);
-//}
 
 bool IndiRainSensor::ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n)
 {
@@ -151,6 +136,5 @@ IPState IndiRainSensor::updateWeather()
 bool IndiRainSensor::saveConfigItems(FILE *fp)
 {
     INDI::Weather::saveConfigItems(fp);
-
     return true;
 }
