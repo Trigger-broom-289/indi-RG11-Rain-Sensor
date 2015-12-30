@@ -39,11 +39,11 @@ class IndiRainSensor : public INDI::Weather
     const char *getDefaultName();
 
     virtual bool initProperties();
-    virtual bool ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n);
+//    virtual bool ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n);
 
     protected:
     virtual IPState updateWeather();
-    virtual bool saveConfigItems(FILE *fp);
+//    virtual bool saveConfigItems(FILE *fp);
 
 };
 

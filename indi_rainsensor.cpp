@@ -104,11 +104,11 @@ bool IndiRainSensor::initProperties()
     return true;
 }
 
-bool IndiRainSensor::ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n)
-{
-    if(!strcmp(dev,getDeviceName()))
-     return INDI::Weather::ISNewText(dev,name,texts,names,n);
-}
+//bool IndiRainSensor::ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n)
+//{
+//    if(!strcmp(dev,getDeviceName()))
+//     return INDI::Weather::ISNewText(dev,name,texts,names,n);
+//}
 
 IPState IndiRainSensor::updateWeather()
 {
@@ -133,8 +133,8 @@ IPState IndiRainSensor::updateWeather()
     return IPS_OK;
 }
 
-bool IndiRainSensor::saveConfigItems(FILE *fp)
-{
-    INDI::Weather::saveConfigItems(fp);
-    return true;
-}
+//bool IndiRainSensor::saveConfigItems(FILE *fp)
+//{
+//    INDI::Weather::saveConfigItems(fp);
+//    return true;
+//}
