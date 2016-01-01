@@ -1,7 +1,7 @@
 /*******************************************************************************
   Copyright(c) 2016 Stephane Lucas. All rights reserved.
 
-  INDI Rain Sensor Driver
+  INDI RG11 Rain Sensor Driver
 
   This program is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the Free
@@ -23,10 +23,10 @@
 *******************************************************************************/
 
 #include <memory>
-#include "indi_rainsensor.h"
+#include "indi_RG11rainsensor.h"
 
-// We declare an auto pointer to RainSensor.
-std::unique_ptr<IndiRainSensor> Indirainsensor(new IndiRainSensor());
+// We declare an auto pointer to RG11RainSensor.
+std::unique_ptr<IndiRG11RainSensor> Indirg11rainsensor(new IndiRG11RainSensor());
 
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
@@ -36,22 +36,22 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 
 void ISGetProperties(const char *dev)
 {
-        Indirainsensor->ISGetProperties(dev);
+        Indirg11rainsensor->ISGetProperties(dev);
 }
 
 void ISNewSwitch(const char *dev, const char *name, ISState *states, char *names[], int num)
 {
-        Indirainsensor->ISNewSwitch(dev, name, states, names, num);
+        Indirg11rainsensor->ISNewSwitch(dev, name, states, names, num);
 }
 
 void ISNewText(	const char *dev, const char *name, char *texts[], char *names[], int num)
 {
-        Indirainsensor->ISNewText(dev, name, texts, names, num);
+        Indirg11rainsensor->ISNewText(dev, name, texts, names, num);
 }
 
 void ISNewNumber(const char *dev, const char *name, double values[], char *names[], int num)
 {
-        Indirainsensor->ISNewNumber(dev, name, values, names, num);
+        Indirg11rainsensor->ISNewNumber(dev, name, values, names, num);
 }
 
 void ISNewBLOB (const char *dev, const char *name, int sizes[], int blobsizes[], char *blobs[], char *formats[], char *names[], int n)
@@ -67,35 +67,35 @@ void ISNewBLOB (const char *dev, const char *name, int sizes[], int blobsizes[],
 }
 void ISSnoopDevice (XMLEle *root)
 {
-    Indirainsensor->ISSnoopDevice(root);
+    Indirg11rainsensor->ISSnoopDevice(root);
 }
 
-IndiRainSensor::IndiRainSensor()
+IndiRG11RainSensor::IndiRG11RainSensor()
 {
    setVersion(1,0);
 }
 
-IndiRainSensor::~IndiRainSensor()
+IndiRG11RainSensor::~IndiRG11RainSensor()
 {
 
 }
 
-const char * IndiRainSensor::getDefaultName()
+const char * IndiRG11RainSensor::getDefaultName()
 {
-    return (char *)"Indi Rain Sensor";
+    return (char *)"Indi RG11 Rain Sensor";
 }
 
-bool IndiRainSensor::Connect()
-{
-    return true;
-}
-
-bool IndiRainSensor::Disconnect()
+bool IndiRG11RainSensor::Connect()
 {
     return true;
 }
 
-bool IndiRainSensor::initProperties()
+bool IndiRG11RainSensor::Disconnect()
+{
+    return true;
+}
+
+bool IndiRG11RainSensor::initProperties()
 {
     INDI::Weather::initProperties();
     addParameter("WEATHER_RAIN", "Rain", 0, 0, 0, 0);
@@ -104,13 +104,7 @@ bool IndiRainSensor::initProperties()
     return true;
 }
 
-//bool IndiRainSensor::ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n)
-//{
-//    if(!strcmp(dev,getDeviceName()))
-//     return INDI::Weather::ISNewText(dev,name,texts,names,n);
-//}
-
-IPState IndiRainSensor::updateWeather()
+IPState IndiRG11RainSensor::updateWeather()
 {
       FILE *in;
       char buff[8];
@@ -132,9 +126,3 @@ IPState IndiRainSensor::updateWeather()
 
     return IPS_OK;
 }
-
-//bool IndiRainSensor::saveConfigItems(FILE *fp)
-//{
-//    INDI::Weather::saveConfigItems(fp);
-//    return true;
-//}

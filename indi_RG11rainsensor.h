@@ -1,7 +1,7 @@
 /*******************************************************************************
   Copyright(c) 2016 Stephane Lucas. All rights reserved.
 
-  INDI Rain Sensor Driver
+  INDI RG11 Rain Sensor Driver
 
   This program is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the Free
@@ -22,16 +22,16 @@
   file called LICENSE.
 *******************************************************************************/
 
-#ifndef INDI_RAINSENSOR_H
-#define INDI_RAINSENSOR_H
+#ifndef INDI_RG11RAINSENSOR_H
+#define INDI_RG11RAINSENSOR_H
 
 #include "indiweather.h"
 
-class IndiRainSensor : public INDI::Weather
+class IndiRG11RainSensor : public INDI::Weather
 {
     public:
-    IndiRainSensor();
-    virtual ~IndiRainSensor();
+    IndiRG11RainSensor();
+    virtual ~IndiRG11RainSensor();
 
     //  Generic indi device entries
     bool Connect();
@@ -39,12 +39,10 @@ class IndiRainSensor : public INDI::Weather
     const char *getDefaultName();
 
     virtual bool initProperties();
-//    virtual bool ISNewText (const char *dev, const char *name, char *texts[], char *names[], int n);
 
     protected:
     virtual IPState updateWeather();
-//    virtual bool saveConfigItems(FILE *fp);
 
 };
 
-#endif // INDI_RAINSENSOR_H
+#endif // INDI_RG11RAINSENSOR_H
