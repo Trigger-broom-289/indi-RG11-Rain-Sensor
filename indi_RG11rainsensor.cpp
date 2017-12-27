@@ -1,27 +1,3 @@
-/*******************************************************************************
-  Copyright(c) 2016 Stephane Lucas. All rights reserved.
-
-  INDI RG11 Rain Sensor Driver
-
-  This program is free software; you can redistribute it and/or modify it
-  under the terms of the GNU General Public License as published by the Free
-  Software Foundation; either version 2 of the License, or (at your option)
-  any later version.
-
-  This program is distributed in the hope that it will be useful, but WITHOUT
-  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-  more details.
-
-  You should have received a copy of the GNU Library General Public License
-  along with this library; see the file COPYING.LIB.  If not, write to
-  the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-  Boston, MA 02110-1301, USA.
-
-  The full GNU General Public License is included in this distribution in the
-  file called LICENSE.
-*******************************************************************************/
-
 #include <memory>
 #include "indi_RG11rainsensor.h"
 
@@ -34,23 +10,38 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
     return size * nmemb;
 }
 
+void ISInit()
+{
+   static int isInit =0;
+
+   if (isInit == 1)
+       return;
+
+    isInit = 1;
+    if(Indirg11rainsensor.get() == 0) Indirg11rainsensor.reset(new IndiRG11RainSensor());
+}
+
 void ISGetProperties(const char *dev)
 {
+	ISInit();
         Indirg11rainsensor->ISGetProperties(dev);
 }
 
 void ISNewSwitch(const char *dev, const char *name, ISState *states, char *names[], int num)
 {
+	ISInit();
         Indirg11rainsensor->ISNewSwitch(dev, name, states, names, num);
 }
 
 void ISNewText(	const char *dev, const char *name, char *texts[], char *names[], int num)
 {
+	ISInit();
         Indirg11rainsensor->ISNewText(dev, name, texts, names, num);
 }
 
 void ISNewNumber(const char *dev, const char *name, double values[], char *names[], int num)
 {
+	ISInit();
         Indirg11rainsensor->ISNewNumber(dev, name, values, names, num);
 }
 
@@ -65,14 +56,17 @@ void ISNewBLOB (const char *dev, const char *name, int sizes[], int blobsizes[],
   INDI_UNUSED(names);
   INDI_UNUSED(n);
 }
+
 void ISSnoopDevice (XMLEle *root)
 {
+    ISInit();
     Indirg11rainsensor->ISSnoopDevice(root);
 }
 
 IndiRG11RainSensor::IndiRG11RainSensor()
 {
    setVersion(1,0);
+   setWeatherConnection(CONNECTION_NONE);
 }
 
 IndiRG11RainSensor::~IndiRG11RainSensor()
@@ -95,6 +89,9 @@ bool IndiRG11RainSensor::Disconnect()
     return true;
 }
 
+/**
+ * Init all properties
+ */
 bool IndiRG11RainSensor::initProperties()
 {
     INDI::Weather::initProperties();
@@ -104,11 +101,16 @@ bool IndiRG11RainSensor::initProperties()
     return true;
 }
 
+bool IndiRG11RainSensor::ISSnoopDevice (XMLEle *root)
+{
+	return INDI::Weather::ISSnoopDevice(root);
+}
+
 IPState IndiRG11RainSensor::updateWeather()
 {
       FILE *in;
       char buff[8];
-      if (!(in = popen("gpio read 4", "r")))
+      if (!(in = popen("gpio read 6", "r")))
       {
         DEBUG(INDI::Logger::DBG_ERROR, "Unable to read GPIO.");
         IPS_ALERT;
@@ -120,9 +122,9 @@ IPState IndiRG11RainSensor::updateWeather()
 	DEBUGF(INDI::Logger::DBG_SESSION, "GPIO buffer (%s)", buff);
 
         if (atoi(buff) == 0)
-            setParameterValue("WEATHER_RAIN", 1);
-        else
             setParameterValue("WEATHER_RAIN", 0);
+        else
+            setParameterValue("WEATHER_RAIN", 1);
 
     return IPS_OK;
 }
