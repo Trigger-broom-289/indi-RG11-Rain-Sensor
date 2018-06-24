@@ -95,7 +95,7 @@ bool IndiRG11RainSensor::Disconnect()
 bool IndiRG11RainSensor::initProperties()
 {
     INDI::Weather::initProperties();
-    addParameter("WEATHER_RAIN", "Rain", 0, 0, 0, 0);
+    addParameter("WEATHER_RAIN", "Rain", 0, 0, 0);
     setCriticalParameter("WEATHER_RAIN");
     addDebugControl();
     return true;
